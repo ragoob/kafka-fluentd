@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: /snap/kompose/1/./kompose-linux-amd64 convert
+    kompose.version: 1.18.0 (06a2e56)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: fluentd
+  name: fluentd
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: fluentd
+    spec:
+      containers:
+      - image: regoo707/fluentd:latest
+        name: fluentd
+        ports:
+        - containerPort: 24224
+        - containerPort: 24224
+          protocol: UDP
+        resources: {}
+        volumeMounts:
+        - mountPath: /fluentd/etc
+          name: fluentd-claim0
+        - mountPath: /home/logs
+          name: fluentd-claim1
+      restartPolicy: Always
+      volumes:
+      - name: fluentd-claim0
+        persistentVolumeClaim:
+          claimName: fluentd-claim0
+      - name: fluentd-claim1
+        persistentVolumeClaim:
+          claimName: fluentd-claim1
+status: {}
