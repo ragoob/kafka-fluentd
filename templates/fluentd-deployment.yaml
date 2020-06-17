@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   annotations:
@@ -10,8 +10,7 @@ metadata:
   name: fluentd
 spec:
   replicas: 1
-  strategy:
-    type: Recreate
+  strategy: {}
   template:
     metadata:
       creationTimestamp: null
@@ -26,17 +25,5 @@ spec:
         - containerPort: 24224
           protocol: UDP
         resources: {}
-        volumeMounts:
-        - mountPath: /fluentd/etc
-          name: fluentd-claim0
-        - mountPath: /home/logs
-          name: fluentd-claim1
       restartPolicy: Always
-      volumes:
-      - name: fluentd-claim0
-        persistentVolumeClaim:
-          claimName: fluentd-claim0
-      - name: fluentd-claim1
-        persistentVolumeClaim:
-          claimName: fluentd-claim1
 status: {}
